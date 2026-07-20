@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" ng-app="productApp">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Chat</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body ng-controller="ChatController as chat">
+  <main class="container">
+    <header>
+      <div>
+        <p class="eyebrow">Realtime chat + SQL Server persistence</p>
+        <h1>WhatsApp-style Support Chat</h1>
+      </div>
+      <a class="primary button-link" href="/">Back to Products</a>
+    </header>
+
+    <section class="chat-shell">
+      <aside class="chat-sidebar">
+        <h2>Rooms</h2>
+        <ul class="chat-rooms">
+          <li ng-repeat="room in chat.rooms track by room.id">
+            <button ng-click="chat.selectRoom(room.id)">{{ room.name }}</button>
+          </li>
+        </ul>
+      </aside>
+
+      <section class="chat-main">
+        <div class="chat-header">
+          <strong>Room #{{ chat.currentRoomId }}</strong>
+          <span>{{ chat.messages.length }} messages</span>
+        </div>
+
+        <div class="chat-messages">
+          <article class="chat-bubble" ng-class="{me: message.sender === chat.form.sender}" ng-repeat="message in chat.messages track by message.id">
+            <small>{{ message.sender }} · {{ message.createdAt | date:'shortTime' }}</small>
+            <div>{{ message.message }}</div>
+          </article>
+        </div>
+
+        <form class="chat-composer" name="chatForm" ng-submit="chat.sendMessage(chatForm)" novalidate>
+          <input type="text" ng-model="chat.form.sender" placeholder="Your name" required>
+          <textarea ng-model="chat.form.message" placeholder="Type a message..." required></textarea>
+          <button class="primary" type="submit">Send</button>
+        </form>
+        <p class="chat-error" ng-if="chat.chatError">{{ chat.chatError }}</p>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

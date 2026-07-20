@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Wireless Headphones",
+    "category": "Electronics",
+    "price": 79.99,
+    "stock": 188,
+    "description": "Noise-cancelling over-ear headphones."
+  },
+  {
+    "id": 3,
+    "name": "Everyday Notebook",
+    "category": "Stationery",
+    "price": 9.95,
+    "stock": 75,
+    "description": "Hardcover notebook with dotted pages."
+  },
+  {
+    "id": 4,
+    "name": "fbd",
+    "category": "455",
+    "price": 0,
+    "stock": 0,
+    "description": "ghf"
+  }
+]

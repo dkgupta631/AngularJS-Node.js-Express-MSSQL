@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" ng-app="productApp">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product Manager</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body ng-controller="ProductController as vm">
+  <main class="container">
+    <header>
+      <div><p class="eyebrow">AngularJS + Node.js API + Express + Microsoft SQL Server</p><h1>Product Manager created by DK</h1></div>
+      <div class="header-actions">
+        <a class="primary button-link" href="/chat">Open Chat</a>
+        <button class="primary" ng-click="vm.openCreate()">+ Add product</button>
+      </div>
+    </header>
+
+    <section class="toolbar">
+      <input type="search" ng-model="vm.query" placeholder="Search products or categories">
+      <span>{{ (vm.products | filter:vm.query).length }} products</span>
+    </section>
+
+    <p class="notice error" ng-if="vm.error">{{ vm.error }}</p>
+    <p class="notice success" ng-if="vm.message">{{ vm.message }}</p>
+
+    <section class="table-wrap">
+      <table>
+        <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th></th></tr></thead>
+        <tbody>
+          <tr ng-repeat="product in vm.products | filter:vm.query track by product.id">
+            <td><strong>{{ product.name }}</strong><small>{{ product.description || 'No description' }}</small></td>
+            <td><span class="badge">{{ product.category }}</span></td>
+            <td>{{ product.price | currency }}</td>
+            <td><span ng-class="{low: product.stock < 10}">{{ product.stock }} units</span></td>
+            <td class="actions"><button ng-click="vm.openEdit(product)">Edit</button><button class="danger" ng-click="vm.remove(product)">Delete</button></td>
+          </tr>
+          <tr ng-if="!vm.loading && (vm.products | filter:vm.query).length === 0"><td colspan="5" class="empty">No matching products.</td></tr>
+        </tbody>
+      </table>
+      <p class="loading" ng-if="vm.loading">Loading products…</p>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" ng-if="vm.showForm">
+    <section class="modal" role="dialog" aria-modal="true">
+      <div class="modal-header"><h2>{{ vm.editing ? 'Edit product' : 'New product' }}</h2><button class="close" ng-click="vm.closeForm()">×</button></div>
+      <form name="productForm" ng-submit="vm.save(productForm)" novalidate>
+        <label>Name<input ng-model="vm.form.name" required maxlength="100" autofocus></label>
+        <label>Category<input ng-model="vm.form.category" required maxlength="60"></label>
+        <div class="grid"><label>Price<input type="number" ng-model="vm.form.price" min="0" step="0.01" required></label><label>Stock<input type="number" ng-model="vm.form.stock" min="0" step="1" required></label></div>
+        <label>Description<textarea ng-model="vm.form.description" rows="3" maxlength="300"></textarea></label>
+        <p class="form-error" ng-if="productForm.$submitted && productForm.$invalid">Please complete all required fields with valid values.</p>
+        <div class="form-actions"><button type="button" ng-click="vm.closeForm()">Cancel</button><button class="primary" type="submit" ng-disabled="vm.saving">{{ vm.saving ? 'Saving…' : 'Save product' }}</button></div>
+      </form>
+    </section>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
