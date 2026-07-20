@@ -1,4 +1,4 @@
-# Product CRUD — AngularJS + Node.js + Express + Microsoft SQL Server
+# Product — AngularJS + Node.js + Express + Microsoft SQL Server
 
 ## Run it
 
